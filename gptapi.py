@@ -12,7 +12,6 @@ load_dotenv()
 my_api_key = os.getenv("OPENAI_KEY")
 
 openai.api_key = my_api_key
-print(my_api_key)
 # WRITE YOUR CODE HERE
 client = OpenAI(
     api_key=my_api_key,
