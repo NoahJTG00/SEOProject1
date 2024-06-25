@@ -1,0 +1,32 @@
+import sqlite3
+conn = sqlite3.connect('langhelp.db')
+
+# Create a cursor object to interact with the database
+cur = conn.cursor()
+
+def insertData():
+    # Data to be inserted
+    phrases = [
+    ('Spanish', 'Hola', 'Buenos días', 'Buenas tardes', 'Buenas noches', '¿Cómo estás?', '¿Qué tal?', 'Mucho gusto', 'Por favor', 'Gracias', 'De nada', 'Disculpe', 'Lo siento', 'Sí', 'No', '¿Dónde está el baño?', '¿Cuánto cuesta?', '¿Habla inglés?', 'No hablo español', '¿Puede ayudarme?', 'Necesito...', '¿Cómo se dice...?', '¿Qué hora es?', 'Una mesa para dos, por favor', 'La cuenta, por favor', 'Hasta luego'),
+    ('French', 'Bonjour', 'Bon matin', 'Bon après-midi', 'Bonsoir / Bonne nuit', 'Comment ça va?', 'Quoi de neuf?', 'Enchanté', 'S\'il vous plaît', 'Merci', 'De rien', 'Excusez-moi', 'Je suis désolé', 'Oui', 'Non', 'Où sont les toilettes?', 'Combien ça coûte?', 'Parlez-vous anglais?', 'Je ne parle pas français', 'Pouvez-vous m\'aider?', 'J\'ai besoin de...', 'Comment dit-on...?', 'Quelle heure est-il?', 'Une table pour deux, s\'il vous plaît', 'L\'addition, s\'il vous plaît', 'À plus tard / Au revoir'),
+    ('German', 'Hallo', 'Guten Morgen', 'Guten Nachmittag', 'Guten Abend / Gute Nacht', 'Wie geht es Ihnen?', 'Was gibt\'s?', 'Freut mich, dich kennenzulernen', 'Bitte', 'Danke', 'Gern geschehen', 'Entschuldigung', 'Es tut mir leid', 'Ja', 'Nein', 'Wo ist die Toilette?', 'Wie viel kostet das?', 'Sprechen Sie Englisch?', 'Ich spreche kein Deutsch', 'Können Sie mir helfen?', 'Ich brauche...', 'Wie sagt man...?', 'Wie spät ist es?', 'Ein Tisch für zwei, bitte', 'Die Rechnung, bitte', 'Bis später / Auf Wiedersehen'),
+    ('Italian', 'Ciao', 'Buongiorno', 'Buon pomeriggio', 'Buona sera / Buona notte', 'Come stai?', 'Come va?', 'Piacere di conoscerti', 'Per favore', 'Grazie', 'Prego', 'Scusi', 'Mi dispiace', 'Sì', 'No', 'Dov\'è il bagno?', 'Quanto costa?', 'Parli inglese?', 'Non parlo italiano', 'Può aiutarmi?', 'Ho bisogno di...', 'Come si dice...?', 'Che ore sono?', 'Un tavolo per due, per favore', 'Il conto, per favore', 'A più tardi / Arrivederci'),
+    ('Portuguese', 'Olá', 'Bom dia', 'Boa tarde', 'Boa noite', 'Como você está?', 'Como vai?', 'Prazer em conhecê-lo', 'Por favor', 'Obrigado', 'De nada', 'Desculpe', 'Eu sinto muito', 'Sim', 'Não', 'Onde fica o banheiro?', 'Quanto custa?', 'Você fala inglês?', 'Eu não falo português', 'Você pode me ajudar?', 'Eu preciso de...', 'Como se diz...?', 'Que horas são?', 'Uma mesa para dois, por favor', 'A conta, por favor', 'Até logo / Adeus'),
+    ('Dutch', 'Hallo', 'Goedemorgen', 'Goedemiddag', 'Goedenavond / Goede nacht', 'Hoe gaat het?', 'Hoe gaat het?', 'Aangenaam', 'Alstublieft', 'Dank je', 'Graag gedaan', 'Excuseer', 'Het spijt me', 'Ja', 'Nee', 'Waar is de wc?', 'Hoeveel kost het?', 'Spreek je Engels?', 'Ik spreek geen Nederlands', 'Kunt u mij helpen?', 'Ik heb nodig...', 'Hoe zeg je...?', 'Hoe laat is het?', 'Een tafel voor twee, alstublieft', 'De rekening, alstublieft', 'Tot ziens'),
+    ('Swedish', 'Hej', 'God morgon', 'God eftermiddag', 'God kväll / God natt', 'Hur mår du?', 'Hur går det?', 'Trevligt att träffas', 'Snälla', 'Tack', 'Varsågod', 'Ursäkta mig', 'Förlåt', 'Ja', 'Nej', 'Var är toaletten?', 'Hur mycket kostar det?', 'Talar du engelska?', 'Jag talar inte svenska', 'Kan du hjälpa mig?', 'Jag behöver...', 'Hur säger man...?', 'Vad är klockan?', 'Ett bord för två, tack', 'Notan, tack', 'Vi ses senare / Hej då'),
+    ('Norwegian', 'Hei', 'God morgen', 'God ettermiddag', 'God kveld / God natt', 'Hvordan har du det?', 'Hvordan går det?', 'Hyggelig å møte deg', 'Vennligst', 'Takk', 'Vær så god', 'Unnskyld meg', 'Jeg beklager', 'Ja', 'Nei', 'Hvor er toalettet?', 'Hvor mye koster det?', 'Snakker du engelsk?', 'Jeg snakker ikke norsk', 'Kan du hjelpe meg?', 'Jeg trenger...', 'Hvordan sier du...?', 'Hva er klokka?', 'Et bord for to, vær så snill', 'Regningen, vær så snill', 'Sees senere / Ha det'),
+    ('Danish', 'Hej', 'God morgen', 'God eftermiddag', 'God aften / God nat', 'Hvordan har du det?', 'Hvordan går det?', 'Hyggelig at møde dig', 'Venligst', 'Tak', 'Selv tak', 'Undskyld mig', 'Undskyld', 'Ja', 'Nej', 'Hvor er toilettet?', 'Hvor meget koster det?', 'Taler du engelsk?', 'Jeg taler ikke dansk', 'Kan du hjælpe mig?', 'Jeg har brug for...', 'Hvordan siger man...?', 'Hvad er klokken?', 'Et bord for to, venligst', 'Regningen, venligst', 'Vi ses senere / Farvel'),
+    ('Finnish', 'Hei', 'Hyvää huomenta', 'Hyvää iltapäivää', 'Hyvää iltaa / Hyvää yötä', 'Miten voit?', 'Miten menee?', 'Hauska tavata', 'Ole hyvä', 'Kiitos', 'Ole hyvä', 'Anteeksi', 'Olen pahoillani', 'Kyllä', 'Ei', 'Missä on vessa?', 'Paljonko se maksaa?', 'Puhutko englantia?', 'En puhu suomea', 'Voitko auttaa minua?', 'Tarvitsen...', 'Miten sanot...?', 'Paljonko kello on?', 'Pöytä kahdelle, kiitos', 'Lasku, kiitos', 'Nähdään myöhemmin / Hyvästi')
+]
+
+    # Insert data into the table
+    cur.executemany('''
+    INSERT INTO language (language, phrase1, phrase2, phrase3, phrase4, phrase5, phrase6, phrase7, phrase8, phrase9, phrase10, phrase11, phrase12, phrase13, phrase14, phrase15, phrase16, phrase17, phrase18, phrase19, phrase20, phrase21, phrase22, phrase23, phrase24, phrase25)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', phrases)
+
+    # Commit the changes and close the connection
+    conn.commit()
+
+
+
