@@ -56,3 +56,25 @@ What are the outputs?
 List 5 steps to go from input -> output
 What’s the biggest risk?
 How will you know you’re successful?
+
+
+
+
+# Travellers
+1. 25 most common travel phrases
+2. Maybe limit the languages? 10 most common, (Spanish, English, French, Italian,) 
+3. Ask the travellers examples of how to conjugate the verbs/nouns/adjectives/...
+4. Which sql database are we using
+5. Normalizing the table - interjoining the field. 
+6. Email as the primary key
+7. ER diagram
+8. Front end will be in the command line
+9. To use github, you are able to pull information and update the information
+10.Include unit testing
+
+
+A. User Entity, Language Entity
+B. Pick a phrase to get accustomed to it
+
+1. Prompt user
+2. Get database 
