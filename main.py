@@ -2,6 +2,7 @@
 import os
 import openai
 import sqlite3
+import unittest
 from dotenv import load_dotenv
 from user import *
 from insertData import *

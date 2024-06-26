@@ -20,22 +20,33 @@ client = OpenAI(
 
 # Specify the model to use and the messages to send
 def chat(practice, user_language, visiting_language):
+
+    completion = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": f"You are a helpful assistant proficient in {user_language} and {visiting_language}. Please base your response only on the provided phrase."},
+            {"role": "user", "content": f"Please conjugate the following phrase in {visiting_language} and provide examples of its usage: '{practice}'"}
+        ]
+    )
+    print(completion.choices[0].message.content)
     
     while True:
-        user_input = input("You:")
+        user_input = input("\n\nDo you have any questions about the above phrase? (Enter 'exit' to quit)\n")
         
         if user_input.lower() in ['exit', 'quit']:
             print('Thank you!')
             break
-            
+        
         completion = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": f"You are a helpful assistant proficient in {user_language} and {visiting_language}. Please base your response only on the provided phrase."},
-                {"role": "user", "content": f"Please conjugate the following phrase in {visiting_language} and provide examples of its usage: '{practice}'"}
+                {"role": "user", "content": f"{user_input}"}
             ]
         )
-        print(completion.choices[0].message.content)
+        print(f"\n\n{completion.choices[0].message.content}")
+    
+
         
 
 

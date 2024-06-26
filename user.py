@@ -82,7 +82,7 @@ def askLanguages():
 def practice_phrases(user_phrases, visiting_phrases, user_language, visiting_language):
     while True:
         try:
-            num_phrase = int(input("Enter the phrase number you want to practice (1 -25) or 0 to exit:"))
+            num_phrase = int(input("\nEnter the phrase number you want to practice (1 -25) or 0 to exit: "))
 
             if num_phrase == 0:
                 break
@@ -92,10 +92,9 @@ def practice_phrases(user_phrases, visiting_phrases, user_language, visiting_lan
                 continue
             
             practice = visiting_phrases[num_phrase - 1]
-            print(f"Practice Phrase {num_phrase} : {practice}")
+            print(f"Practice Phrase {num_phrase} : {practice}\n\n")
             
-            result = chat(practice, user_language, visiting_language)
-            print(f"AI Response: {result}")
+            chat(practice, user_language, visiting_language)
             
         except ValueError:
             print("The input was not a valid integer")
