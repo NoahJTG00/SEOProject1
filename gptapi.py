@@ -2,7 +2,8 @@ import os
 import openai
 from dotenv import load_dotenv
 from openai import OpenAI
-
+from user import user_language, visiting_language, phrase
+from insertData import *
 
 
 # Load environment variables from a .env file
@@ -31,8 +32,8 @@ def chat():
         completion = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a a user in need of linguistic help"},
-                {"role": "user", "content": user_input}
+                {"role": "system", "content": f"You are a helpful assistant proficient in {user_language} and {visiting_language}. Please base your response only on the provided phrase."},
+                {"role": "user", "content": f"Please conjugate the following phrase in {visiting_language} and provide examples of its usage: '{phrase}'"}
             ]
         )
         print(completion.choices[0].message.content)

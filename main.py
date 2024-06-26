@@ -1,8 +1,12 @@
 # Main file where everything is ran from
+import os
+import openai
 import sqlite3
+from dotenv import load_dotenv
 from user import *
 from insertData import *
 from database import *
+from openai import OpenAI
 
 conn = sqlite3.connect('langhelp.db')
 
@@ -30,7 +34,7 @@ languages = cur.fetchall()
 #insertUser()
 askLanguages()
 
-
+practice_phrases()
 
 # Commit the changes and close the connection
 conn.close()

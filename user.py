@@ -1,5 +1,9 @@
+import os 
 import sqlite3
+import openai
 from tabulate import tabulate
+from gptapi import *
+from openai import OpenAI
 
 conn = sqlite3.connect('langhelp.db')
 
@@ -70,7 +74,44 @@ def askLanguages():
     # Print the phrases in a nice table format
     print("\nCommon Travel Phrases:")
     print(tabulate(table_data, headers=["Phrase #", user_language, visiting_language], tablefmt="grid"))
+    
+    return user_phrases, visiting_phrases, user_language, visiting_language
+    
+    
 
+def practice_phrases(user_phrases, visiting_phrases, user_language, visiting_language):
+    while True:
+        try:
+            num_phrase = int(input("Enter the phrase number you want to practice (1 -25) or 0 to exit:"))
+
+            if num_phrase == 0:
+                break
+            
+            if num_phrase < 1 or num_phrase > 25:
+                print("Please enter a number between 1 and 25.")
+                continue
+            
+            practice = visiting_phrases[num_phrase - 1]
+            print(f"Practice Phrase {num_phrase} : {practice}")
+            
+            result = chat(practice, user_language, visiting_language)
+            print(f"AI Response: {result}")
+            
+        except ValueError:
+            print("The input was not a valid integer")
+
+def main():
+    insertUser()
+    user_phrases, visiting_phrases, user_language, visiting_language = askLanguages()
+    practice_phrases(user_phrases, visiting_phrases, user_language, visiting_language)
+
+if __name__ == "__main__":
+    main()
+            
+
+
+            
+            
 
 
             
