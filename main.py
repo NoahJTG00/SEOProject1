@@ -32,9 +32,9 @@ languages = cur.fetchall()
 
 # Get information from user and insert into table
 #insertUser()
-askLanguages()
+user_phrases, visiting_phrases, user_language, visiting_language = askLanguages()
 
-practice_phrases()
+practice_phrases(user_phrases, visiting_phrases, user_language, visiting_language)
 
 # Commit the changes and close the connection
 conn.close()
