@@ -10,10 +10,10 @@ conn = sqlite3.connect('langhelp.db')
 cur = conn.cursor()
 
 # Create table for users and languages
-createTables()
+# createTables()
 
-# # Insert language data
-insertData()
+# # # Insert language data
+# insertData()
 
 # Query to get all unique languages
 cur.execute('SELECT DISTINCT language FROM language')
@@ -27,7 +27,7 @@ languages = cur.fetchall()
 
 
 # Get information from user and insert into table
-insertUser()
+#insertUser()
 askLanguages()
 
 

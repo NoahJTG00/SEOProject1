@@ -1,4 +1,6 @@
 import sqlite3
+from tabulate import tabulate
+
 conn = sqlite3.connect('langhelp.db')
 
 # Create a cursor object to interact with the database
@@ -61,9 +63,13 @@ def askLanguages():
     ''', (visiting_language,))
     visiting_phrases = cur.fetchone()
 
-    for i in range(len(user_phrases)):
-        print(f"Phrase: {user_phrases[i]}\tTranslation: {visiting_phrases[i]}")
-    print("")
+    table_data = []
+    for i in range(25):
+        table_data.append([f"Phrase {i + 1}", user_phrases[i], visiting_phrases[i]])
+
+    # Print the phrases in a nice table format
+    print("\nCommon Travel Phrases:")
+    print(tabulate(table_data, headers=["Phrase #", user_language, visiting_language], tablefmt="grid"))
 
 
 
