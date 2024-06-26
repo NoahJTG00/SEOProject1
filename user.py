@@ -91,11 +91,13 @@ def practice_phrases(user_phrases, visiting_phrases, user_language, visiting_lan
                 print("Please enter a number between 1 and 25.")
                 continue
             
-            practice = visiting_phrases[num_phrase - 1]
+            practice = visiting_phrases[num_phrase -1]
+            
             print(f"Practice Phrase {num_phrase} : {practice}\n\n")
             
             chat(practice, user_language, visiting_language)
             
+        
         except ValueError:
             print("The input was not a valid integer")
 
