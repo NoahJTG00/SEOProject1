@@ -10,10 +10,10 @@ conn = sqlite3.connect('langhelp.db')
 cur = conn.cursor()
 
 # Create table for users and languages
-# createTables()
+createTables()
 
 # # Insert language data
-# insertData()
+insertData()
 
 # Query to get all unique languages
 cur.execute('SELECT DISTINCT language FROM language')
@@ -22,12 +22,13 @@ cur.execute('SELECT DISTINCT language FROM language')
 languages = cur.fetchall()
 
 # Print the list of languages
-for language in languages:
-    print(language[0])
+# for language in languages:
+#     print(language[0])
 
 
 # Get information from user and insert into table
 insertUser()
+askLanguages()
 
 
 

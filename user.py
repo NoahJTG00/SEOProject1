@@ -22,7 +22,7 @@ def insertUser():
 
 def askLanguages():
 
-    cur.execute('SELECT DISTINCT language FROM travel_phrases')
+    cur.execute('SELECT DISTINCT language FROM language')
     languages = cur.fetchall()
     language_list = [lang[0] for lang in languages]
     for i, language in enumerate(language_list):
@@ -38,11 +38,7 @@ def askLanguages():
         print("The input was not a valid integer.")
     
     user_language = language_list[user_language_ind - 1]
-    travel_language = language_list[travel_language_ind - 1]
-
-
-
-
+    visiting_language = language_list[travel_language_ind - 1]
 
     # Code to select languages
     cur.execute(f'''
@@ -50,7 +46,7 @@ def askLanguages():
             phrase1, phrase2, phrase3, phrase4, phrase5, phrase6, phrase7, phrase8, phrase9, phrase10,
             phrase11, phrase12, phrase13, phrase14, phrase15, phrase16, phrase17, phrase18, phrase19, phrase20,
             phrase21, phrase22, phrase23, phrase24, phrase25
-        FROM travel_phrases
+        FROM language
         WHERE language = ?
     ''', (user_language,))
     user_phrases = cur.fetchone()
@@ -60,10 +56,15 @@ def askLanguages():
             phrase1, phrase2, phrase3, phrase4, phrase5, phrase6, phrase7, phrase8, phrase9, phrase10,
             phrase11, phrase12, phrase13, phrase14, phrase15, phrase16, phrase17, phrase18, phrase19, phrase20,
             phrase21, phrase22, phrase23, phrase24, phrase25
-        FROM travel_phrases
+        FROM language
         WHERE language = ?
     ''', (visiting_language,))
     visiting_phrases = cur.fetchone()
+
+    for i in range(len(user_phrases)):
+        print(f"Phrase: {user_phrases[i]}\tTranslation: {visiting_phrases[i]}")
+    print("")
+
 
 
             
