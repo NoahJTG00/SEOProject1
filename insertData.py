@@ -25,6 +25,25 @@ def insertData():
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', phrases)
 
+    translations = [
+    ('Español', 'Espagnol', 'Spanisch', 'Spagnolo', 'Espanhol', 'Spaans', 'Spanska', 'Spansk', 'Spansk', 'Spanish'),
+    ('Francés', 'Français', 'Französisch', 'Francese', 'Francês', 'Frans', 'Franska', 'Fransk', 'Fransk', 'French'),
+    ('Alemán', 'Allemand', 'Deutsch', 'Tedesco', 'Alemão', 'Duits', 'Tyska', 'Tysk', 'Tysk', 'German'),
+    ('Italiano', 'Italien', 'Italienisch', 'Italiano', 'Italiano', 'Italiaans', 'Italienska', 'Italiensk', 'Italiensk', 'Italian'),
+    ('Portugués', 'Portugais', 'Portugiesisch', 'Portoghese', 'Português', 'Portugees', 'Portugisiska', 'Portugisisk', 'Portugisisk', 'Portuguese'),
+    ('Holandés', 'Néerlandais', 'Niederländisch', 'Olandese', 'Holandês', 'Nederlands', 'Nederländska', 'Nederlandsk', 'Hollandsk', 'Dutch'),
+    ('Sueco', 'Suédois', 'Schwedisch', 'Svedese', 'Sueco', 'Zweeds', 'Svenska', 'Svensk', 'Svensk', 'Swedish'),
+    ('Noruego', 'Norvégien', 'Norwegisch', 'Norvegese', 'Norueguês', 'Noors', 'Norska', 'Norsk', 'Norsk', 'Norwegian'),
+    ('Danés', 'Danois', 'Dänisch', 'Danese', 'Dinamarquês', 'Deens', 'Danska', 'Dansk', 'Dansk', 'Danish'),
+    ('Inglés', 'Anglais', 'Englisch', 'Inglese', 'Inglês', 'Engels', 'Engelska', 'Engelsk', 'Engelsk', 'English')
+    ]
+
+    # Insert data into the table
+    cur.executemany('''
+    INSERT INTO languages_translation (Español, Français, Deutsch, Italiano, Português, Nederlands, Svenska, Norsk, Dansk, English)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', translations)
+
     # Commit the changes and close the connection
     conn.commit()
 

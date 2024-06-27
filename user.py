@@ -11,45 +11,98 @@ conn = sqlite3.connect('langhelp.db')
 cur = conn.cursor()
 def user():
     while True:
-        name = print_translate("Please enter your name", user_language, ": ", True)
-        email = print_translate("Please enter your email", user_language, ": ", True)
+        name = input("Username: ")
+        password = input("Password: ")
         
-        if "@" in email and (email.endswith(".com") or email.endswith(".edu")):
-            return name, email
+        return name, password
         
-        else:
-            print("Invalid email address. Please input a valid email")
             
 def insertUser():
-    name, email = user()
-    # Insert the user info into the user table 
-    cur.execute('INSERT INTO users (name, email) VALUES (?,?)', (name, email))
-    conn.commit()
+    while True:
+        name, password = user()
+        
+        # Check if the user already exists
+        cur.execute('''
+            SELECT 1 FROM users WHERE name = ? AND password = ?
+        ''', (name, password))
+        
+        if cur.fetchone() is None:
+            try:
+                cur.execute('INSERT INTO users (name, password) VALUES (?, ?)', (name, password))
+                conn.commit()
+                return name, password  # Exit the loop after successful insertion
+            except sqlite3.IntegrityError:
+                print(f"Username '{name}' already exists. Please select another one.")
+        else:
+            return name, password
 
-def askLanguages():
 
-    cur.execute('SELECT DISTINCT language FROM language')
-    languages = cur.fetchall()
-    language_list = [lang[0] for lang in languages]
-    cur.execute('SELECT statement FROM language')
-    statements = cur.fetchall()
-
-    # Separate the statements into a list
-    statement_list = [statement[0] for statement in statements]
-    for statement in statement_list:
-        print(statement)
+def askLanguages(username, password):
+    cur.execute('''
+        SELECT native_language FROM users 
+        WHERE name = ? AND password = ?
+    ''', (username, password))
     
-    try:
-        user_language_ind = int(input("\n"))
-    except ValueError:
-        print("The input was not a valid integer.") 
-    cur.execute('INSERT INTO users (native_language) VALUES (?)', (language_list[user_language_ind - 1],))
+    result = cur.fetchone()
+    if not result[0]:
 
-    user_language = language_list[user_language_ind - 1]
-    try:
-        travel_language_ind = int(print_translate("Select the language of the country you are visiting by entering it's number", user_language, ": ", True))
-    except ValueError:
-        print_translate("The input was not a valid integer", user_language, ".")
+        cur.execute('SELECT DISTINCT language FROM language')
+        languages = cur.fetchall()
+        language_list = [lang[0] for lang in languages]
+        cur.execute('SELECT statement FROM language')
+        statements = cur.fetchall()
+
+        # Separate the statements into a list
+        statement_list = [statement[0] for statement in statements]
+        print("")
+        while True:
+            for statement in statement_list:
+                print(statement)
+            try:
+                user_language_ind = int(input("\n"))
+            except ValueError:
+                print("The input was not a valid integer.\n")
+            if user_language_ind > 10 or user_language_ind < 1:
+                print("Please enter a number between 1 and 10.\n")
+                continue
+            else:
+                break
+        
+        user_language = language_list[user_language_ind - 1]
+        cur.execute('''
+        UPDATE users 
+        SET native_language = ? 
+        WHERE name = ? AND password = ?
+        ''', (user_language, username, password))
+        conn.commit()
+
+    else:
+        user_language = result[0]
+    
+    query = f'SELECT {user_language} FROM languages_translation'
+    cur.execute(query)
+
+    # Fetch all results
+    user_languages = cur.fetchall()
+
+    # Print the results
+    
+
+    while True:
+        print("")
+        for i, language in enumerate(user_languages, start=1):
+            print(f"{i}. {language[0]}")
+        print("\n")    
+        try:
+            travel_language_ind = int(print_translate("Select the language of the country you are visiting by entering it's number", user_language, ": ", True))
+        except ValueError:
+            print_translate("The input was not a valid integer", user_language, ".")
+        if travel_language_ind > 10 or travel_language_ind < 1:
+            print_translate("Please enter a number between 1 and 10", user_language, en=".\n")
+            continue
+        else:
+            break
+
     
     visiting_language = language_list[travel_language_ind - 1]
 
@@ -91,8 +144,8 @@ def printTable(user_phrases, visiting_phrases, user_language, visiting_language)
     
 
 def practice_phrases(user_phrases, visiting_phrases, user_language, visiting_language):
-    printTable(user_phrases, visiting_phrases, user_language, visiting_language)
     while True:
+        printTable(user_phrases, visiting_phrases, user_language, visiting_language)
         try:
             print()
             num_phrase = int(print_translate("Enter the phrase number you want to practice (1 - 25) or 0 to exit", user_language, ": ", True))

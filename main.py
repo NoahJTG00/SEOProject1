@@ -21,9 +21,9 @@ cur = conn.cursor()
 
 # Create table for users and languages
 
-# createTables()
+createTables()
 
-# # # Insert language data
+# # # # Insert language data
 # insertData()
 
 # Query to get all unique languages
@@ -38,9 +38,11 @@ languages = cur.fetchall()
 
 
 # Get information from user and insert into table
-#insertUser()
+name, password = insertUser()
 
-user_phrases, visiting_phrases, user_language, visiting_language = askLanguages()
+user_phrases, visiting_phrases, user_language, visiting_language = askLanguages(name, password)
+
+
 
 practice_phrases(user_phrases, visiting_phrases, user_language, visiting_language)
 

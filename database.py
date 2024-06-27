@@ -7,7 +7,10 @@ conn = sqlite3.connect('langhelp.db')
 cur = conn.cursor()
 
 # Code to DELETE ALL ENTRIES! uncomment as needed
+# cur.execute('DROP TABLE IF EXISTS language')
 # cur.execute('DROP TABLE IF EXISTS users')
+# cur.execute('DROP TABLE IF EXISTS languages_translation')
+
 # cur.execute('DELETE FROM language')
 # cur.execute('DELETE FROM users')
 # conn.commit()
@@ -17,17 +20,29 @@ cur = conn.cursor()
 def createTables():
     # Created a user table
     cur.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY,
-            name TEXT,
-            email TEXT,
-            native_language TEXT,
-            CHECK (email LIKE '%_@_%._%' AND (email LIKE '%.com' OR email LIKE '.edu'))
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY,
+        name TEXT UNIQUE,
+        password TEXT,
+        native_language TEXT
+    )
+    ''')
+    
+    #Create a language table
+    cur.execute('''
+    CREATE TABLE IF NOT EXISTS languages_translation (
+        Español TEXT,
+        Français TEXT,
+        Deutsch TEXT,
+        Italiano TEXT,
+        Português TEXT,
+        Nederlands TEXT,
+        Svenska TEXT,
+        Norsk TEXT,
+        Dansk TEXT,
+        English TEXT
         )
     ''')
-    #Create a language table
-
-    import sqlite3
 
 
     # Create the table with columns for each common travel phrase

@@ -19,7 +19,7 @@ client = OpenAI(
 )
 
 # Translate any phrase
-def print_translate(phrase, user_language, en, inpt=False):
+def print_translate(phrase, user_language, en="", inpt=False, r=False):
     translated_phrase = phrase
     if user_language != 'English':
         completion = client.chat.completions.create(
@@ -32,6 +32,8 @@ def print_translate(phrase, user_language, en, inpt=False):
         translated_phrase = completion.choices[0].message.content
     if inpt:
         return input(translated_phrase + en)
+    elif r:
+        return translated_phrase + en
     else:
         print(translated_phrase + en, end = "")
 
@@ -49,7 +51,7 @@ def chat(practice, user_language, visiting_language):
     
     while True:
         print("\n")
-        user_input = print_translate("Do you have any questions about the above phrase? (Enter 0 to quit or -1 to select another phrase)", user_language, "\n", True)
+        user_input = print_translate("Do you have any questions about the above phrase? Enter 0 to quit or -1 to select another phrase", user_language, "\n", True)
         
         if user_input == '-1':
             return 1
@@ -58,10 +60,13 @@ def chat(practice, user_language, visiting_language):
             print_translate('Thank you', user_language, "!")
             return 0
         
+        practice_translated = f"You are a helpful assistant proficient in {user_language} and {visiting_language}. Please respond as if the user only spoke {user_language} and was trying to learn {visiting_language}. Base your response on the following phrase"
+        practice_translated = print_translate(practice_translated, user_language, en=": ", r=True)
+        
         completion = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": f"You are a helpful assistant proficient in {user_language} and {visiting_language}. Please respond as if the user only spoke {user_language} and was trying to learn {visiting_language}. Base your response on {practice}"},
+                {"role": "system", "content": f"{practice_translated} {practice}"},
                 {"role": "user", "content": f"{user_input}"}
             ]
         )
