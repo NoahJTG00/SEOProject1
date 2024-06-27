@@ -11,8 +11,8 @@ conn = sqlite3.connect('langhelp.db')
 cur = conn.cursor()
 def user():
     while True:
-        name = input("Please enter your name: ")
-        email = input("Please enter your email: ")
+        name = print_translate("Please enter your name", user_language, ": ", True)
+        email = print_translate("Please enter your email", user_language, ": ", True)
         
         if "@" in email and (email.endswith(".com") or email.endswith(".edu")):
             return name, email
@@ -31,19 +31,26 @@ def askLanguages():
     cur.execute('SELECT DISTINCT language FROM language')
     languages = cur.fetchall()
     language_list = [lang[0] for lang in languages]
-    for i, language in enumerate(language_list):
-        print(f"{i+1}: {language}")
+    cur.execute('SELECT statement FROM language')
+    statements = cur.fetchall()
+
+    # Separate the statements into a list
+    statement_list = [statement[0] for statement in statements]
+    for statement in statement_list:
+        print(statement)
+    
     try:
-        user_language_ind = int(input("\nSelect your language from the list above by entering it's number: "))
+        user_language_ind = int(input("\n"))
     except ValueError:
         print("The input was not a valid integer.") 
+    cur.execute('INSERT INTO users (native_language) VALUES (?)', (language_list[user_language_ind - 1],))
 
-    try:
-        travel_language_ind = int(input("Select the language of the country you are visiting by entering it's number: "))
-    except ValueError:
-        print("The input was not a valid integer.")
-    
     user_language = language_list[user_language_ind - 1]
+    try:
+        travel_language_ind = int(print_translate("Select the language of the country you are visiting by entering it's number", user_language, ": ", True))
+    except ValueError:
+        print_translate("The input was not a valid integer", user_language, ".")
+    
     visiting_language = language_list[travel_language_ind - 1]
 
     # Code to select languages
@@ -66,36 +73,45 @@ def askLanguages():
         WHERE language = ?
     ''', (visiting_language,))
     visiting_phrases = cur.fetchone()
+    return user_phrases, visiting_phrases, user_language, visiting_language
+
+def printTable(user_phrases, visiting_phrases, user_language, visiting_language):
 
     table_data = []
     for i in range(25):
         table_data.append([f"Phrase {i + 1}", user_phrases[i], visiting_phrases[i]])
 
     # Print the phrases in a nice table format
-    print("\nCommon Travel Phrases:")
+    print()
+    print_translate("Common Travel Phrases", user_language, ": \n")
     print(tabulate(table_data, headers=["Phrase #", user_language, visiting_language], tablefmt="grid"))
     
-    return user_phrases, visiting_phrases, user_language, visiting_language
+    
     
     
 
 def practice_phrases(user_phrases, visiting_phrases, user_language, visiting_language):
+    printTable(user_phrases, visiting_phrases, user_language, visiting_language)
     while True:
         try:
-            num_phrase = int(input("\nEnter the phrase number you want to practice (1 -25) or 0 to exit: "))
+            print()
+            num_phrase = int(print_translate("Enter the phrase number you want to practice (1 - 25) or 0 to exit", user_language, ": ", True))
 
             if num_phrase == 0:
+                print_translate("Thank you", user_language, "!")
                 break
             
             if num_phrase < 1 or num_phrase > 25:
-                print("Please enter a number between 1 and 25.")
+                print_translate("Please enter a number between 1 and 25", user_language, ".\n")
                 continue
             
             practice = visiting_phrases[num_phrase -1]
+            print_translate("Practice Phrase ", user_language, " ")
+            print(f"{num_phrase} : {practice}\n\n")
             
-            print(f"Practice Phrase {num_phrase} : {practice}\n\n")
-            
-            chat(practice, user_language, visiting_language)
+            res = chat(practice, user_language, visiting_language)
+            if res == 0:
+                break
             
         
         except ValueError:

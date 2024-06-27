@@ -20,6 +20,7 @@ conn = sqlite3.connect('langhelp.db')
 cur = conn.cursor()
 
 # Create table for users and languages
+
 # createTables()
 
 # # # Insert language data
@@ -38,6 +39,7 @@ languages = cur.fetchall()
 
 # Get information from user and insert into table
 #insertUser()
+
 user_phrases, visiting_phrases, user_language, visiting_language = askLanguages()
 
 practice_phrases(user_phrases, visiting_phrases, user_language, visiting_language)

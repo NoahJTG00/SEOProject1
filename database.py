@@ -7,10 +7,10 @@ conn = sqlite3.connect('langhelp.db')
 cur = conn.cursor()
 
 # Code to DELETE ALL ENTRIES! uncomment as needed
-# cur.execute('DROP TABLE IF EXISTS language')
+# cur.execute('DROP TABLE IF EXISTS users')
 # cur.execute('DELETE FROM language')
 # cur.execute('DELETE FROM users')
-# conn.commit() 
+# conn.commit()
 # conn.close()
 
 
@@ -19,8 +19,9 @@ def createTables():
     cur.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY,
-            name TEXT NOT NULL,
+            name TEXT,
             email TEXT,
+            native_language TEXT,
             CHECK (email LIKE '%_@_%._%' AND (email LIKE '%.com' OR email LIKE '.edu'))
         )
     ''')
@@ -34,6 +35,7 @@ def createTables():
     CREATE TABLE IF NOT EXISTS language (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         language TEXT NOT NULL,
+        statement TEXT,
         phrase1 TEXT,
         phrase2 TEXT,
         phrase3 TEXT,
