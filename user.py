@@ -22,7 +22,7 @@ def user():
             
 def insertUser():
     name, email = user()
-    #Insert the user info into the user table 
+    # Insert the user info into the user table 
     cur.execute('INSERT INTO users (name, email) VALUES (?,?)', (name, email))
     conn.commit()
 

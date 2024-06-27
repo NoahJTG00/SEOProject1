@@ -61,7 +61,7 @@ def chat(practice, user_language, visiting_language):
         completion = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": f"You are a helpful assistant proficient in {user_language} and {visiting_language}. Please respond as if the user only spoke {user_language} and was trying to learn {visiting_language}"},
+                {"role": "system", "content": f"You are a helpful assistant proficient in {user_language} and {visiting_language}. Please respond as if the user only spoke {user_language} and was trying to learn {visiting_language}. Base your response on {practice}"},
                 {"role": "user", "content": f"{user_input}"}
             ]
         )
