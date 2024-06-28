@@ -60,13 +60,18 @@ def chat(practice, user_language, visiting_language):
             print_translate('Thank you', user_language, "!")
             return 0
         
-        practice_translated = f"You are a helpful assistant proficient in {user_language} and {visiting_language}. Please respond as if the user only spoke {user_language} and was trying to learn {visiting_language}. Base your response on the following phrase"
+        practice_translated = f"You are a helpful assistant proficient in {user_language} and {visiting_language}."
         practice_translated = print_translate(practice_translated, user_language, en=": ", r=True)
+        practice_translated1 = f"Please respond as if the user only spoke {user_language} and was trying to learn {visiting_language}."
+        practice_translated1 = print_translate(practice_translated1, user_language, en='.', r=True)
+        practice_translated2 = print_translate("Base your response on the following phrase", user_language, en=": ", r=True)
         
         completion = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": f"{practice_translated} {practice}"},
+                {"role": "system", "content": f"{practice_translated}"},
+                {"role": "system", "content": f"{practice_translated1}"},
+                {"role": "system", "content": f"{practice_translated2} {practice}"},
                 {"role": "user", "content": f"{user_input}"}
             ]
         )

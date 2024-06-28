@@ -44,11 +44,13 @@ def askLanguages(username, password):
     ''', (username, password))
     
     result = cur.fetchone()
+    cur.execute('SELECT DISTINCT language FROM language')
+    languages = cur.fetchall()
+    language_list = [lang[0] for lang in languages]
+    
+    
     if not result[0]:
 
-        cur.execute('SELECT DISTINCT language FROM language')
-        languages = cur.fetchall()
-        language_list = [lang[0] for lang in languages]
         cur.execute('SELECT statement FROM language')
         statements = cur.fetchall()
 
